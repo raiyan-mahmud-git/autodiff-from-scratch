@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TinyDL digit demo</title>
+  <style>
+    :root { color-scheme: light dark; --page: #f5f7fb; --card: #fff; --ink: #192233; --muted: #526078; --line: #b6c1d2; --accent: #245bd6; --focus: #df6b00; }
+    @media (prefers-color-scheme: dark) {
+      :root { --page: #111827; --card: #1d293b; --ink: #f0f4fb; --muted: #bac5d6; --line: #526078; --accent: #a8c2ff; --focus: #ffbd69; }
+    }
+    :root[data-theme="light"] { color-scheme: light; --page: #f5f7fb; --card: #fff; --ink: #192233; --muted: #526078; --line: #b6c1d2; --accent: #245bd6; --focus: #df6b00; }
+    :root[data-theme="dark"] { color-scheme: dark; --page: #111827; --card: #1d293b; --ink: #f0f4fb; --muted: #bac5d6; --line: #526078; --accent: #a8c2ff; --focus: #ffbd69; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink); font: 1rem/1.5 system-ui, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+    p { color: var(--muted); }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 1rem; padding: 1.25rem; margin-top: 1.25rem; }
+    .controls, .samples { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: .85rem; }
+    button { color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: .55rem; padding: .65rem .9rem; font: inherit; cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .primary { color: #fff; background: #245bd6; border-color: #245bd6; }
+    canvas { display: block; width: min(100%, 280px); height: auto; aspect-ratio: 1; margin: 1rem auto; border: 2px solid var(--line); border-radius: .5rem; background: #050505; touch-action: none; cursor: crosshair; }
+    .results { min-height: 3rem; }
+    .predictions { padding-left: 1.4rem; }
+    .note { border-left: 4px solid var(--accent); padding-left: .8rem; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 460px) { .topbar { align-items: flex-start; flex-direction: column; } .card { padding: 1rem; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <h1>TinyDL digit demo</h1>
+        <p>Draw one or more separated digits, or choose a sample to try the classifier.</p>
+      </div>
+      <button id="theme-toggle" type="button" aria-label="Switch color theme">Use dark theme</button>
+    </header>
+
+    <section class="card" aria-labelledby="draw-heading">
+      <h2 id="draw-heading">Draw one or more digits</h2>
+      <p id="draw-help">Use your mouse, touch, or stylus to draw digits with a clear space between them. If drawing is unavailable, the sample buttons below work with a keyboard.</p>
+      <canvas id="drawing" width="280" height="280" aria-label="Drawing area for a handwritten digit. Keyboard users can use the sample digit buttons below."></canvas>
+      <div class="controls">
+        <button class="primary" id="clear" type="button">Clear drawing</button>
+        <button id="predict" type="button">Predict digit</button>
+      </div>
+      <h3>Try a sample digit</h3>
+      <div class="samples" aria-label="Sample digits">
+        <button type="button" data-sample="0" aria-label="Load sample digit zero">Sample 0</button>
+        <button type="button" data-sample="1" aria-label="Load sample digit one">Sample 1</button>
+        <button type="button" data-sample="2" aria-label="Load sample digit two">Sample 2</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="results-heading">
+      <h2 id="results-heading">Prediction</h2>
+      <div id="result" class="results" aria-live="polite" aria-atomic="true">Your top three predictions will appear here.</div>
+      <p class="note">Hand-drawn digits differ from the MNIST test images, so this demo is usually less accurate than the test-set result.</p>
+    </section>
+  </main>
+  <script id="model-data" type="application/json"></script>
+  <script src="forward.js?v=2"></script>
+  <script src="app.js?v=3"></script>
+</body>
+</html>
+
+

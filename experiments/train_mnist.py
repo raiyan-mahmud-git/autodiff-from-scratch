@@ -183,7 +183,6 @@ def main() -> None:
     print(f"Test accuracy: mean={mean:.4f}, sample_std={standard_deviation:.4f}, n={len(test_accuracies)}")
     print(f"Wrote {result_path} and {curve_path}")
 
-    # Save seed zero's validation-selected model as Phase 8's starting point.
     seed_zero = next((row for row in selected if row["seed"] == 0), selected[0])
     export_model = _model(int(seed_zero["seed"]))
     _restore(export_model, seed_zero["parameters"])  # type: ignore[arg-type]
